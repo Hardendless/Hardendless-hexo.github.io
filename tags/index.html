@@ -327,23 +327,23 @@
 				
 				
 				
+					
 				
 				
 				
+					
 				
 				
 				
+					
 				
 				
 				
+					
 				
 				
 				
-				
-				
-				
-				
-				
+					
 				
 				
 				目前共计 5 个标签
@@ -353,6 +353,17 @@
 				<a href="/tags/Hexo/" style="font-size: 12px; color: #fff">Hexo</a> <a href="/tags/Javascript/" style="font-size: 12px; color: #fff">Javascript</a> <a href="/tags/Leetcode/" style="font-size: 30px; color: #fff">Leetcode</a> <a href="/tags/Next/" style="font-size: 12px; color: #fff">Next</a> <a href="/tags/%E5%89%91%E6%8C%87offer/" style="font-size: 30px; color: #fff">剑指offer</a>
 				             
 			</div>
+			<script type="text/javascript">
+				var alltags=document.getElementById('tags');
+				var tags=alltags.getElementsByTagName('a');
+
+				for (var i = tags.length - 1; i >= 0; i--) {
+					var r=Math.floor(Math.random()*75+130);
+					var g=Math.floor(Math.random()*75+100);
+					var b=Math.floor(Math.random()*75+80);
+					tags[i].style.background = "rgb("+r+","+g+","+b+")";
+				}
+			</script>
           </div>
         
       </div>
@@ -650,17 +661,6 @@
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-<script type="text/javascript">
-    var alltags=document.getElementById('tags');
-    var tags=alltags.getElementsByTagName('a');
-
-    for (var i = tags.length - 1; i >= 0; i--) {
-        var r=Math.floor(Math.random()*75+130);
-        var g=Math.floor(Math.random()*75+100);
-        var b=Math.floor(Math.random()*75+80);
-        tags[i].style.background = "rgb("+r+","+g+","+b+")";
-    }
-</script>
 
 
 
