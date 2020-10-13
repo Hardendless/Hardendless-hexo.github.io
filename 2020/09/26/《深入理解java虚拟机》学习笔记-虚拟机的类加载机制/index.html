@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="类加载的时机JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？  主动引用 遇到 new、getstatic、putstatic、invokestatic 字节码指令，例如： 使用 new 实例化对象； 读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入理解java虚拟机》学习笔记-虚拟机的类加载机制">
+<meta property="og:url" content="http://yoursite.com/2020/09/26/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="类加载的时机JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？  主动引用 遇到 new、getstatic、putstatic、invokestatic 字节码指令，例如： 使用 new 实例化对象； 读">
+<meta property="article:published_time" content="2020-09-26T07:42:34.229Z">
+<meta property="article:modified_time" content="2020-09-26T12:42:06.112Z">
+<meta property="article:author" content="Hardendless">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/09/26/《深入理解java虚拟机》学习笔记-虚拟机的类加载机制/"/>
+
+
+
+
+
+  <title>《深入理解java虚拟机》学习笔记-虚拟机的类加载机制 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/26/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入理解java虚拟机》学习笔记-虚拟机的类加载机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-26T15:42:34+08:00">
+                2020-09-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？</p>
+<ul>
+<li>主动引用<ul>
+<li>遇到 new、getstatic、putstatic、invokestatic 字节码指令，例如：<ul>
+<li>使用 new 实例化对象；</li>
+<li>读取或设置一个类的 static 字段（被 final 修饰的除外）；</li>
+<li>调用类的静态方法。</li>
+</ul>
+</li>
+<li>对类进行反射调用；</li>
+<li>初始化一个类时，其父类还没初始化（需先初始化父类）；<ul>
+<li>这点类与接口具有不同的表现，接口初始化时，不要求其父接口完成初始化，只有真正使用父接口时才初始化，如引用父接口中定义的常量。</li>
+</ul>
+</li>
+<li>虚拟机启动，先初始化包含 main() 函数的主类；</li>
+<li>JDK 1.7 动态语言支持：一个 java.lang.invoke.MethodHandle 的解析结果为 REF_getStatic、REF_putStatic、REF_invokeStatic。</li>
+<li>一个接口定义了JDK8新加入的默认方法（被default关键字修饰的接口方法）时，这个接口的实现类发生了初始化，那该接口要再其之前被初始化。</li>
+</ul>
+</li>
+<li>被动引用<ul>
+<li>通过子类引用父类静态字段，不会导致子类初始化；</li>
+<li><code>Array[] arr = new Array[10];</code> 不会触发 Array 类初始化；</li>
+<li><code>static final VAR</code> 在编译阶段会存入调用类的常量池，通过 <code>ClassName.VAR</code> 引用不会触发 ClassName 初始化。</li>
+</ul>
+</li>
+</ul>
+<p>也就是说，只有发生主动引用所列出的 5 种情况，一个类才会被加载到内存中，也就是说类的加载是 lazy-load 的，不到必要时刻是不会提前加载的，毕竟如果将程序运行中永远用不到的类加载进内存，会占用方法区中的内存，浪费系统资源。</p>
+<h2 id="类的显式加载和隐式加载"><a href="#类的显式加载和隐式加载" class="headerlink" title="类的显式加载和隐式加载"></a>类的显式加载和隐式加载</h2><ul>
+<li>显示加载：<ul>
+<li>调用 <code>ClassLoader#loadClass(className)</code> 或 <code>Class.forName(className)</code>。</li>
+<li>两种显示加载 .class 文件的区别：<ul>
+<li><code>Class.forName(className)</code> 加载 class 的同时会初始化静态域，<code>ClassLoader#loadClass(className)</code> 不会初始化静态域；</li>
+<li>Class.forName 借助当前调用者的 class 的 ClassLoader 完成 class 的加载。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>隐式加载：<ul>
+<li>new 类对象；</li>
+<li>使用类的静态域；</li>
+<li>创建子类对象；</li>
+<li>使用子类的静态域；</li>
+<li>其他的隐式加载，在 JVM 启动时：<ul>
+<li>BootStrapLoader 会加载一些 JVM 自身运行所需的 Class；</li>
+<li>ExtClassLoader 会加载指定目录下一些特殊的 Class；</li>
+<li>AppClassLoader 会加载 classpath 路径下的 Class，以及 main 函数所在的类的 Class 文件。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h2><h3 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">加载 --&gt; 验证 --&gt; 准备 --&gt; 解析 --&gt; 初始化 --&gt; 使用 --&gt; 卸载</span><br><span class="line">       |&lt;------- 连接 -------&gt;|</span><br><span class="line">|&lt;------------- 类加载 ----------------&gt;|</span><br></pre></td></tr></table></figure>
+
+<p>类的生命周期一共有 7 个阶段，其中前五个阶段较为重要，统称为类加载，第 2 ~ 4 阶段统称为连接，加载和连接中的三个过程开始的顺序是固定的，但是执行过程中是可以交叉执行的。接下来，我们将对类加载的 5 个阶段进行一一讲解。</p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><h4 id="加载的-3-个阶段"><a href="#加载的-3-个阶段" class="headerlink" title="加载的 3 个阶段"></a>加载的 3 个阶段</h4><ul>
+<li>通过类的全限定名获取二进制字节流（将 .class 文件读进内存）；</li>
+<li>将字节流的静态存储结构转化为运行时的数据结构；</li>
+<li>在内存中生成该类的 Class 对象；<ul>
+<li>HotSpot 虚拟机把这个对象放在方法区，非 Java 堆。</li>
+</ul>
+</li>
+</ul>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ul>
+<li>非数组类<ul>
+<li>系统提供的引导类加载器</li>
+<li>用户自定义的类加载器</li>
+</ul>
+</li>
+<li>数组类<ul>
+<li>不通过类加载器，由 Java 虚拟机直接创建</li>
+<li>创建动作由 newarray 指令触发，new 实际上触发了 <code>[L全类名</code> 对象的初始化</li>
+<li>规则<ul>
+<li>数组元素是引用类型<ul>
+<li>加载：递归加载其组件</li>
+<li>可见性：与引用类型一致</li>
+</ul>
+</li>
+<li>数组元素是非引用类型<ul>
+<li>加载：与引导类加载器关联</li>
+<li>可见性：public</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><ul>
+<li><strong>目的：</strong> 确保 .class 文件中的字节流信息符合虚拟机的要求。</li>
+<li>4 个验证过程：<ul>
+<li>文件格式验证：是否符合 Class 文件格式规范，保证输入的字节流能正确的解析并存储于方法区之内，验证文件开头 4 个字节是不是 “魔数” <code>0xCAFEBABE</code></li>
+<li>元数据验证：保证字节码描述信息符号 Java 规范（语义分析），类的元数据信息进行了语义校验</li>
+<li>字节码验证：程序语义、逻辑是否正确（通过数据流、控制流分析）</li>
+<li>符号引用验证：对类自身以外的信息（常量池中的符号引用）进行匹配性校验</li>
+</ul>
+</li>
+<li>这个操作虽然重要，但不是必要的，可以通过 <code>-Xverify:none</code> 关掉。</li>
+</ul>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><ul>
+<li><p><strong>描述：</strong> 为 static 变量在方法区分配内存。</p>
+</li>
+<li><p>static 变量准备后的初始值：</p>
+<ul>
+<li><pre><code>public static int value = 123;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  - 准备后为 0，value 的赋值指令 putstatic 会被放在 &#96;&lt;clinit&gt;()&#96; 方法中，&#96;&lt;clinit&gt;()&#96;方法会在初始化时执行，也就是说，value 变量只有在初始化后才等于 123。</span><br><span class="line"></span><br><span class="line">-</span><br></pre></td></tr></table></figure>
+public static final int value = 123;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    - 准备后为 123，因为被 &#96;static final&#96; 赋值之后 value 就不能再修改了，所以在这里进行了赋值之后，之后不可能再出现赋值操作，所以可以直接在准备阶段就把 value 的值初始化好。</span><br><span class="line"></span><br><span class="line">### 解析</span><br><span class="line"></span><br><span class="line">- 描述：</span><br><span class="line"></span><br><span class="line">  将常量池中的 “符号引用” 替换为 “直接引用”。</span><br><span class="line"></span><br><span class="line">  - 在此之前，常量池中的引用是不一定存在的，解析过之后，可以保证常量池中的引用在内存中一定存在。</span><br><span class="line">  - 什么是 “符号引用” 和 “直接引用” ？</span><br><span class="line">    - 符号引用：以一组符号描述所引用的对象（如对象的全类名），引用的目标不一定存在于内存中。</span><br><span class="line">    - 直接引用：直接指向被引用目标在内存中的位置的指针等，也就是说，引用的目标一定存在于内存中。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">**解析过程**</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 初始化</span><br><span class="line"></span><br><span class="line">- **描述：** 执行类构造器 &#96;&lt;clinit&gt;()&#96; 方法的过程。</span><br><span class="line"></span><br><span class="line">- &#96;&lt;clinit&gt;()&#96; 方法</span><br><span class="line"></span><br><span class="line">  - 包含的内容：</span><br><span class="line"></span><br><span class="line">    - 所有 static 的赋值操作；</span><br><span class="line">    - static 块中的语句；</span><br><span class="line"></span><br><span class="line">  -</span><br></pre></td></tr></table></figure>
+&lt;clinit&gt;()
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  方法中的语句顺序：</span><br><span class="line"></span><br><span class="line">  - 基本按照语句在源文件中出现的顺序排列；</span><br><span class="line">  - 静态语句块只能访问定义在它前面的变量，定义在它后面的变量，可以赋值，但不能访问。</span><br><span class="line"></span><br><span class="line">- 与</span><br></pre></td></tr></table></figure>
+&lt;init&gt;()
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">的不同：</span><br><span class="line"></span><br><span class="line">- 不需要显示调用父类的 &#96;&lt;clinit&gt;()&#96; 方法；</span><br><span class="line"></span><br><span class="line">- 虚拟机保证在子类的</span><br></pre></td></tr></table></figure>
+  &lt;clinit&gt;()
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">方法执行前，父类的</span><br></pre></td></tr></table></figure>
+  &lt;clinit&gt;()</code></pre><p>  方法一定执行完毕。</p>
+<ul>
+<li>也就是说，父类的 static 块和 static 字段的赋值操作是要先于子类的。</li>
+</ul>
+</li>
+<li><p>接口与类的不同：</p>
+<ul>
+<li>执行子接口的 <code>&lt;clinit&gt;()</code> 方法前不需要先执行父接口的 <code>&lt;clinit&gt;()</code> 方法（除非用到了父接口中定义的 public static final 变量）；</li>
+</ul>
+</li>
+<li><p>执行过程中加锁：</p>
+<ul>
+<li>同一时刻只能有一个线程在执行 <code>&lt;clinit&gt;()</code> 方法，因为虚拟机要保证在同一个类加载器下，一个类只被加载一次。</li>
+</ul>
+</li>
+<li><p>非必要性：</p>
+<ul>
+<li>一个类如果没有任何 static 的内容就不需要执行 <code>&lt;clinit&gt;()</code> 方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>注：初始化时，才真正开始执行类中定义的 Java 代码。</em></p>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><h3 id="如何判断两个类-“相等”"><a href="#如何判断两个类-“相等”" class="headerlink" title="如何判断两个类 “相等”"></a>如何判断两个类 “相等”</h3><ul>
+<li>“相等” 的要求<ul>
+<li>同一个 .class 文件</li>
+<li>被同一个虚拟机加载</li>
+<li>被同一个类加载器加载</li>
+</ul>
+</li>
+<li>判断 “相等” 的方法<ul>
+<li><code>instanceof</code> 关键字</li>
+<li>Class 对象中的方法：<ul>
+<li><code>equals()</code></li>
+<li><code>isInstance()</code></li>
+<li><code>isAssignableFrom()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="类加载器的分类"><a href="#类加载器的分类" class="headerlink" title="类加载器的分类"></a>类加载器的分类</h3><ul>
+<li>启动类加载器（Bootstrap）<ul>
+<li><JAVA_HOME>/lib</li>
+<li>-Xbootclasspath 参数指定的路径</li>
+</ul>
+</li>
+<li>扩展类加载器（Extension）<ul>
+<li><JAVA_HOME>/lib/ext</li>
+<li>java.ext.dirs 系统变量指定的路径</li>
+</ul>
+</li>
+<li>应用程序类加载器（Application）<ul>
+<li>-classpath 参数</li>
+</ul>
+</li>
+</ul>
+<h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><ul>
+<li>工作过程<ul>
+<li>当前类加载器收到类加载的请求后，先不自己尝试加载类，而是先将请求委派给父类加载器<ul>
+<li>因此，所有的类加载请求，都会先被传送到启动类加载器</li>
+</ul>
+</li>
+<li>只有当父类加载器加载失败时，当前类加载器才会尝试自己去自己负责的区域加载</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>检查该类是否已经被加载</li>
+<li>将类加载请求委派给父类<ul>
+<li>如果父类加载器为 null，默认使用启动类加载器</li>
+<li><code>parent.loadClass(name, false)</code></li>
+</ul>
+</li>
+<li>当父类加载器加载失败时<ul>
+<li>catch ClassNotFoundException 但不做任何处理</li>
+<li>调用自己的 findClass() 去加载<ul>
+<li>我们在实现自己的类加载器时只需要 <code>extends ClassLoader</code>，然后重写 <code>findClass()</code> 方法而不是 <code>loadClass()</code> 方法，这样就不用重写 <code>loadClass()</code> 中的双亲委派机制了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>自己写的类库同名类不会覆盖类库的类</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/26/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Class%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/" rel="next" title="《深入理解java虚拟机》学习笔记-Class文件的组成结构">
+                <i class="fa fa-chevron-left"></i> 《深入理解java虚拟机》学习笔记-Class文件的组成结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" rel="prev" title="机器学习-线性回归">
+                机器学习-线性回归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Hardendless" />
+            
+              <p class="site-author-name" itemprop="name">Hardendless</p>
+              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Hardendless" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/Hardendless" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐阅读
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.apple.com/swift/" title="Swift 4" target="_blank">Swift 4</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.apple.com/documentation/objectivec" title="Objective-C" target="_blank">Objective-C</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的时机"><span class="nav-text">类加载的时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的显式加载和隐式加载"><span class="nav-text">类的显式加载和隐式加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的过程"><span class="nav-text">类加载的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的生命周期"><span class="nav-text">类的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载"><span class="nav-text">加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载的-3-个阶段"><span class="nav-text">加载的 3 个阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分类"><span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-text">准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何判断两个类-“相等”"><span class="nav-text">如何判断两个类 “相等”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器的分类"><span class="nav-text">类加载器的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-text">双亲委派模型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hardendless</span>
+
+  
+</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共字</span>
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

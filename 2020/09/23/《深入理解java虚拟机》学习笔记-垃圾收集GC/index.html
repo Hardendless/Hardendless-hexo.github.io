@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="垃圾收集（Garbage Collection，GC），它的任务是解决以下 3 件问题：  哪些内存需要回收？ 什么时候回收？ 如何回收？  其中第一个问题很好回答，在 Java 中，GC 主要发生在 Java 堆和方法区中，对于后两个问题，我们将在之后的内容中进行讨论，并介绍 HotSpot 的 7 个垃圾收集器。  垃圾收集 (GC) 判断对象的生死 判断对象是否可用的算法 引用计数算法 可达">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入理解java虚拟机》学习笔记-垃圾收集GC">
+<meta property="og:url" content="http://yoursite.com/2020/09/23/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86GC/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="垃圾收集（Garbage Collection，GC），它的任务是解决以下 3 件问题：  哪些内存需要回收？ 什么时候回收？ 如何回收？  其中第一个问题很好回答，在 Java 中，GC 主要发生在 Java 堆和方法区中，对于后两个问题，我们将在之后的内容中进行讨论，并介绍 HotSpot 的 7 个垃圾收集器。  垃圾收集 (GC) 判断对象的生死 判断对象是否可用的算法 引用计数算法 可达">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924154338847.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924155408710.png">
+<meta property="og:image" content="https://github.com/TangBean/understanding-the-jvm/raw/master/Ch1-Java%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6/pic/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4GC%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924160529916.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924161806550.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924162603185.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924164211448.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924164557817.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924163400493.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924164947674.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924171330386.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924171348779.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924173552243.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924173609615.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924173629358.png">
+<meta property="article:published_time" content="2020-09-23T09:09:50.724Z">
+<meta property="article:modified_time" content="2020-09-24T12:32:05.623Z">
+<meta property="article:author" content="Hardendless">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924154338847.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/09/23/《深入理解java虚拟机》学习笔记-垃圾收集GC/"/>
+
+
+
+
+
+  <title>《深入理解java虚拟机》学习笔记-垃圾收集GC | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/23/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86GC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入理解java虚拟机》学习笔记-垃圾收集GC</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-23T17:09:50+08:00">
+                2020-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>垃圾收集（Garbage Collection，GC），它的任务是解决以下 3 件问题：</p>
+<ul>
+<li>哪些内存需要回收？</li>
+<li>什么时候回收？</li>
+<li>如何回收？</li>
+</ul>
+<p>其中第一个问题很好回答，在 Java 中，GC 主要发生在 Java 堆和方法区中，对于后两个问题，我们将在之后的内容中进行讨论，并介绍 HotSpot 的 7 个垃圾收集器。</p>
+<ul>
+<li>垃圾收集 (GC)<ul>
+<li>判断对象的生死<ul>
+<li>判断对象是否可用的算法<ul>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#引用计数算法" target="_blank" rel="noopener">引用计数算法</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#可达性分析算法主流" target="_blank" rel="noopener">可达性分析算法（主流）</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#四种引用类型" target="_blank" rel="noopener">四种引用类型</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#宣告对象死亡的两次标记过程" target="_blank" rel="noopener">宣告对象死亡的两次标记过程</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#方法区的回收" target="_blank" rel="noopener">方法区的回收</a></li>
+</ul>
+</li>
+<li>垃圾收集算法<ul>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#基础标记---清除算法" target="_blank" rel="noopener">基础：标记 - 清除算法</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#解决效率问题复制算法" target="_blank" rel="noopener">解决效率问题：复制算法</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#解决空间碎片问题标记---整理算法" target="_blank" rel="noopener">解决空间碎片问题：标记 - 整理算法</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#进化分代收集算法" target="_blank" rel="noopener">进化：分代收集算法</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#hotspot-中-gc-算法的实现" target="_blank" rel="noopener">HotSpot 中 GC 算法的实现</a></li>
+<li>7 个垃圾收集器<ul>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#serial--parnew-搭配-serial-old-收集器" target="_blank" rel="noopener">Serial / ParNew 搭配 Serial Old 收集器</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#parallel-搭配-parallel-scavenge-收集器" target="_blank" rel="noopener">Parallel 搭配 Parallel Scavenge 收集器</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#cms-收集器" target="_blank" rel="noopener">CMS 收集器</a></li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#g1-收集器" target="_blank" rel="noopener">G1 收集器</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/02-垃圾收集(GC).md#gc-日志解读" target="_blank" rel="noopener">GC 日志解读</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="判断对象的生死"><a href="#判断对象的生死" class="headerlink" title="判断对象的生死"></a>判断对象的生死</h2><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924154338847.png" alt="image-20200924154338847"></p>
+<p>什么时候回收对象？当然是这个对象再也不会被用到的时候回收。所以要想解决 “什么时候回收？” 这个问题，我们要先能判断一个对象什么时候什么时候真正的 “死” 掉了，判断对象是否可用主要有以下两种方法。</p>
+<h3 id="判断对象是否可用的算法"><a href="#判断对象是否可用的算法" class="headerlink" title="判断对象是否可用的算法"></a>判断对象是否可用的算法</h3><h4 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h4><ul>
+<li>算法描述：<ul>
+<li>给对象添加一个引用计数器；</li>
+<li>每有一个地方引用它，计数器加 1；</li>
+<li>引用失效时，计数器减 1；</li>
+<li>计数器值为 0 的对象不再可用。</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>很难解决循环引用的问题。即 <code>objA.instance = objB; objB.instance = objA;</code>，objA 和 objB 都不会再被访问后，它们仍然相互引用着对方，所以它们的引用计数器不为 0，将永远不能被判为不可用。</li>
+</ul>
+</li>
+</ul>
+<h4 id="可达性分析算法（主流）"><a href="#可达性分析算法（主流）" class="headerlink" title="可达性分析算法（主流）"></a>可达性分析算法（主流）</h4><ul>
+<li>算法描述：<ul>
+<li>从 “GC Root” 对象作为起点开始向下搜索，走过的路径称为引用链（Reference Chain）；</li>
+<li>从 “GC Root” 开始，不可达的对象被判为不可用。</li>
+</ul>
+</li>
+<li>Java 中可作为 “GC Root” 的对象：<ul>
+<li>栈中（本地变量表中的reference）<ul>
+<li>虚拟机栈中，栈帧中的本地变量表引用的对象；</li>
+<li>本地方法栈中，JNI 引用的对象（native方法）；</li>
+</ul>
+</li>
+<li>方法区中<ul>
+<li>类的静态属性引用的对象；</li>
+<li>常量引用的对象；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>即便如此，一个对象也不是一旦被判为不可达，就立即死去的，宣告一个的死亡需要经过两次标记过程。</p>
+<h3 id="四种引用类型"><a href="#四种引用类型" class="headerlink" title="四种引用类型"></a>四种引用类型</h3><p>JDK 1.2 后，Java 中才有了后 3 种引用的实现。</p>
+<ul>
+<li><strong>强引用：</strong> 像 <code>Object obj = new Object()</code> 这种，只要强引用还存在，垃圾收集器就永远不会回收掉被引用的对象。</li>
+<li><strong>软引用：</strong> 用来引用还存在但非必须的对象。对于软引用对象，在 OOM 前，虚拟机会把这些对象列入回收范围中进行第二次回收，如果这次回收后，内存还是不够用，就 OOM。实现类：<code>SoftReference</code>。</li>
+<li><strong>弱引用：</strong> 强度比软引用更弱一些，被弱引用引用的对象只能生存到下一次垃圾收集前，一旦发生垃圾收集，被弱引用所引用的对象就会被清掉。实现类：<code>WeakReference</code>。</li>
+<li><strong>虚引用：</strong> 幽灵引用，对对象没有半毛钱影响，甚至不能用来取得一个对象的实例。它唯一的用途就是：当被一个虚引用引用的对象被回收时，系统会收到这个对象被回收了的通知。实现类：<code>PhantomReference</code>。</li>
+</ul>
+<h3 id="宣告对象死亡的两次标记过程"><a href="#宣告对象死亡的两次标记过程" class="headerlink" title="宣告对象死亡的两次标记过程"></a>宣告对象死亡的两次标记过程</h3><ul>
+<li>当发现对象不可达后，该对象被第一次标记，并进行是否有必要执行<strong>finalize()</strong>方法的判断；<ul>
+<li>不需要执行：对象没有覆盖 <code>finalize()</code> 方法，或者 <code>finalize()</code> 方法已被执行过（<code>finalize()</code> 只被执行一次）；</li>
+<li>需要执行：将该对象放置在一个F-Queue队列中，稍后由一个虚拟机自动创建的低优先级线程Finalizer执行。</li>
+</ul>
+</li>
+<li><code>finalize()</code> 方法是对象逃脱死亡的最后一次机会，不过虚拟机不保证等待 <code>finalize()</code> 方法执行结束，也就是说，虚拟机只触发 <code>finalize()</code> 方法的执行，如果这个方法要执行超久，那么虚拟机并不等待它执行结束，所以最好不要用这个方法。</li>
+<li><code>finalize()</code> 方法能做的，try-finally 都能做，所以忘了这个方法吧！</li>
+</ul>
+<h3 id="方法区的回收"><a href="#方法区的回收" class="headerlink" title="方法区的回收"></a>方法区的回收</h3><p>永久代的 GC 主要回收：<strong>废弃常量</strong> 和 <strong>无用的类</strong>。</p>
+<ul>
+<li>废弃常量：例如一个字符串 “abc”，当没有任何引用指向 “abc” 时，它就是废弃常量了。</li>
+<li>无用的类：同时满足以下 3 个条件的类。<ul>
+<li>该类的所有实例已被回收，Java 堆中不存在该类的任何实例；</li>
+<li>加载该类的 Classloader 已被回收；</li>
+<li>该类的 Class 对象没有被任何地方引用，即无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924155408710.png" alt="image-20200924155408710"></p>
+<h3 id="基础：标记-清除算法"><a href="#基础：标记-清除算法" class="headerlink" title="基础：标记 - 清除算法"></a>基础：标记 - 清除算法</h3><ul>
+<li>算法描述：<ul>
+<li>先标记出所有需要回收的对象（图中深色区域）；</li>
+<li>标记完后，统一回收所有被标记对象（留下狗啃似的可用内存区域……）。</li>
+</ul>
+</li>
+<li>不足：<ul>
+<li>效率问题：标记和清理两个过程的效率都不高。</li>
+<li>空间碎片问题：标记清除后会产生大量不连续的内存碎片，导致以后为较大的对象分配内存时找不到足够的连续内存，会提前触发另一次 GC。</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://github.com/TangBean/understanding-the-jvm/blob/master/Ch1-Java内存管理机制/pic/标记清除GC算法.png" target="_blank" rel="noopener"><img src="https://github.com/TangBean/understanding-the-jvm/raw/master/Ch1-Java%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6/pic/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4GC%E7%AE%97%E6%B3%95.png" alt="标记清除GC算法.png"></a></p>
+<h3 id="解决效率问题：复制算法"><a href="#解决效率问题：复制算法" class="headerlink" title="解决效率问题：复制算法"></a>解决效率问题：复制算法</h3><ul>
+<li><strong>算法描述：</strong><ul>
+<li>将可用内存分为大小相等的两块，每次只使用其中一块；</li>
+<li>当一块内存用完时，将这块内存上还存活的对象复制到另一块内存上去，将这一块内存全部清理掉。</li>
+</ul>
+</li>
+<li><strong>不足：</strong> 可用内存缩小为原来的一半，适合GC过后只有少量对象存活的新生代。</li>
+<li><strong>节省内存的方法：</strong><ul>
+<li>新生代中的对象 98% 都是朝生夕死的，所以不需要按照 1:1 的比例对内存进行划分；</li>
+<li>把内存划分为：<ul>
+<li>1 块比较大的 Eden 区；</li>
+<li>2 块较小的 Survivor 区；</li>
+</ul>
+</li>
+<li>每次使用 Eden 区和 1 块 Survivor 区；</li>
+<li>回收时，将以上 2 部分区域中的存活对象复制到另一块 Survivor 区中，然后将以上两部分区域清空；</li>
+<li>JVM 参数设置：<code>-XX:SurvivorRatio=8</code> 表示 <code>Eden 区大小 / 1 块 Survivor 区大小 = 8</code>。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924160529916.png" alt="image-20200924160529916"></p>
+<h3 id="解决空间碎片问题：标记-整理算法"><a href="#解决空间碎片问题：标记-整理算法" class="headerlink" title="解决空间碎片问题：标记 - 整理算法"></a>解决空间碎片问题：标记 - 整理算法</h3><ul>
+<li>算法描述：<ul>
+<li>标记方法与 “标记 - 清除算法” 一样；</li>
+<li>标记完后，将所有存活对象向一端移动，然后直接清理掉边界以外的内存。</li>
+</ul>
+</li>
+<li><strong>不足：</strong> 存在效率问题，适合老年代。</li>
+</ul>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924161806550.png" alt="image-20200924161806550"></p>
+<h3 id="进化：分代收集算法"><a href="#进化：分代收集算法" class="headerlink" title="进化：分代收集算法"></a>进化：分代收集算法</h3><ul>
+<li><strong>新生代：</strong> GC 过后只有少量对象存活 —— <strong>复制算法</strong></li>
+<li><strong>老年代：</strong> GC 过后对象存活率高 —— <strong>标记 - 整理算法或者标记-清理算法</strong></li>
+</ul>
+<h2 id="HotSpot-中-GC-算法的实现"><a href="#HotSpot-中-GC-算法的实现" class="headerlink" title="HotSpot 中 GC 算法的实现"></a>HotSpot 中 GC 算法的实现</h2><p>通过前两小节对于判断对象生死和垃圾收集算法的介绍，我们已经对虚拟机是进行 GC 的流程有了一个大致的了解。但是，在 HotSpot 虚拟机中，高效的实现这些算法也是一个需要考虑的问题。所以，接下来，我们将研究一下 HotSpot 虚拟机到底是如何高效的实现这些算法的，以及在实现中有哪些需要注意的问题。</p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924162603185.png" alt="image-20200924162603185"></p>
+<p>通过之前的分析，GC 算法的实现流程简单的来说分为以下两步：</p>
+<ol>
+<li>找到死掉的对象；</li>
+<li>把它清了。</li>
+</ol>
+<p>想要找到死掉的对象，我们就要进行可达性分析，也就是从 GC Root 找到引用链的这个操作。</p>
+<p>也就是说，进行可达性分析的第一步，就是要<strong><u>枚举 GC Roots</u></strong>，这就需要虚拟机知道哪些地方存放着对象应用。如果每一次枚举 GC Roots 都需要把整个栈上位置都遍历一遍，那可就费时间了，毕竟并不是所有位置都存放在引用呀。所以为了提高 GC 的效率，HotSpot 使用了一种 OopMap 的数据结构，<strong>OopMap 记录了栈上本地变量到堆上对象的引用关系</strong>，也就是说，GC 的时候就不用遍历整个栈只遍历每个栈的 OopMap 就行了。</p>
+<p>在 OopMap 的帮助下，HotSpot 可以快速准确的完成 GC 枚举了，不过，OopMap 也不是万年不变的，它也是需要被更新的，当内存中的对象间的引用关系发生变化时，就需要改变 OopMap 中的相应内容。可是能导致引用关系发生变化的指令非常之多，如果我们执行完一条指令就改下 OopMap，这 GC 成本实在太高了。</p>
+<p>因此，HotSpot 采用了一种在 <u><strong>“安全点”</strong></u> 更新 OopMap 的方法，安全点的选取既不能让 GC 等待的时间过长，也不能过于频繁增加运行负担，也就是说，我们既要让程序运行一段时间，又不能让这个时间太长。我们知道，JVM 中每条指令执行的是很快的，所以一个超级长的指令流也可能很快就执行完了，所以 <strong>真正会出现 “长时间执行” 的一般是指令的复用，例如：方法调用、循环跳转、异常跳转等</strong>，虚拟机一般会将这些地方设置为安全点更新 OopMap 并判断是否需要进行 GC 操作。</p>
+<p>此外，在进行枚举根节点的这个操作时，为了保证准确性，我们需要在一段时间内 “冻结” 整个应用，即 Stop The World（传说中的 GC 停顿），因为如果在我们分析可达性的过程中，对象的引用关系还在变来变去，那是不可能得到正确的分析结果的。即便是在号称几乎不会发生停顿的 CMS 垃圾收集器中，枚举根节点时也是必须要停顿的。这里就涉及到了一个问题：</p>
+<p><strong>我们让所有线程跑到最近的安全点再停顿下来进行 GC 操作呢？</strong></p>
+<p>主要有以下两种方式：</p>
+<ul>
+<li><p>抢先式中断：（几乎不用）</p>
+<ul>
+<li>先中断所有线程；</li>
+<li>发现有线程没中断在安全点，恢复它，让它跑到安全点。</li>
+</ul>
+</li>
+<li><p>主动式中断：(主要使用)</p>
+<ul>
+<li>设置一个中断标记；</li>
+</ul>
+</li>
+<li><p>每个线程到达安全点时，检查这个中断标记，选择是否中断自己。</p>
+</li>
+</ul>
+<p>除此安全点之外，还有一个叫做 <strong><u>“安全区域”</u></strong> 的东西，一个一直在执行的线程可以自己 “走” 到安全点去，可是一个处于 Sleep 或者 Blocked 状态的线程是没办法自己到达安全点中断自己的，我们总不能让 GC 操作一直等着这些个 ”不执行“ 的线程重新被分配资源吧。对于这种情况，我们要依靠安全区域来解决。</p>
+<p><strong>安全区域是指在一段代码片段之中，引用关系不会发生变化，因此在这个区域中的任意位置开始 GC 都是安全的。</strong></p>
+<p>当线程执行到安全区域时，它会把自己标识为 Safe Region，这样 JVM 发起 GC 时是不会理会这个线程的。当这个线程要离开安全区域时，它会检查系统是否在 GC 中，如果不在，它就继续执行，如果在，它就等 GC 结束再继续执行。</p>
+<p>本小节我们主要讲述 HotSpot 虚拟机是如何发起内存回收的，也就是如何找到死掉的对象，至于如何清掉这些个对象，HotSpot 将其交给了一堆叫做 ”GC 收集器“ 的东西，这东西又有好多种，不同的 GC 收集器的处理方式不同，适用的场景也不同，我们将在下一小节进行详细讲述。</p>
+<h3 id="记忆集与卡表"><a href="#记忆集与卡表" class="headerlink" title="记忆集与卡表"></a>记忆集与卡表</h3><p> 讲解分代收集理论的时候，提到了为解决对象跨代引用所带来的问题，垃圾收集器在新生代中建立了名为记忆集（Remembered Set）的数据结构，用以避免把整个老年代加进GC Roots扫描范围。事实上并不只是新生代、老年代之间才有跨代引用的问题，所有涉及部分区域收集（Partial GC）行为的垃圾收集器，典型的如G1、ZGC和Shenandoah收集器，都会面临相同的问题，因此我们有必要进一步理清记忆集的原理和实现方式，以便在后续章节里介绍几款最新的收集器相关知识时能更好地理解。<br>记忆集是一种用于记录从非收集区域指向收集区域的指针集合的抽象数据结构。如果我们不考虑效率和成本的话，最简单的实现可以用非收集区域中所有含跨代引用的对象数组来实现这个数据结构，如代码清单3-5所示：</p>
+<p>​                        以对象指针来实现记忆集的伪代码</p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924164211448.png" alt="image-20200924164211448"></p>
+<p>这种记录全部含跨代引用对象的实现方案，无论是空间占用还是维护成本都相当高昂。而在垃圾收集的场景中，收集器只需要通过记忆集判断出某一块非收集区域是否存在有指向了收集区域的指针就可以了，并不需要了解这些跨代指针的全部细节。那设计者在实现记忆集的时候，便可以选择更为粗犷的记录粒度来节省记忆集的存储和维护成本，下面列举了一些可供选择（当然也可以选择这个范围以外的）的记录精度：</p>
+<ul>
+<li>字长精度：每个记录精确到一个机器字长（就是处理器的寻址位数，如常见的32位或64位，这个精度决定了机器访问物理内存地址的指针长度），该字包含跨代指针。</li>
+<li>对象精度：每个记录精确到一个对象，该对象里有字段含有跨代指针。</li>
+<li>卡精度：每个记录精确到一块内存区域，该区域内有对象含有跨代指针。</li>
+</ul>
+<p>第三种“卡精度”所指的是用一种称为“卡表”（Card Table）的方式去实现记忆集[1]，这也是目前最常用的一种记忆集实现形式，一些资料中甚至直接把它和记忆集混为一谈。前面定义中提到记忆集其实是一种“抽象”的数据结构，抽象的意思是只定义了记忆集的行为意图，并没有定义其行为的具体实现。卡表就是记忆集的一种具体实现，它定义了记忆集的记录精度、与堆内存的映射关系等。关于卡表与记忆集的关系，读者不妨按照Java语言中HashMap与Map的关系来类比理解。<br>卡表最简单的形式可以只是一个字节数组，而HotSpot虚拟机确实也是这样做的。以下这行代码是HotSpot默认的卡表标记逻辑：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CARD_TABLE [this address &gt;&gt; 9] &#x3D; 0;</span><br></pre></td></tr></table></figure>
+
+<p>字节数组CARD_TABLE的每一个元素都对应着其标识的内存区域中一块特定大小的内存块，这个内存块被称作“卡页”（Card Page）。一般来说，卡页大小都是以2的N次幂的字节数，通过上面代码可以看出HotSpot中使用的卡页是2的9次幂，即512字节（地址右移9位，相当于用地址除以512）。那如果卡表标识内存区域的起始地址是0x0000的话，数组CARD_TABLE的第0、1、2号元素，分别对应了地址范围为0x0000～0x01FF、0x0200～0x03FF、0x0400～0x05FF的卡页内存块[4]，如图3-5所示。</p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924164557817.png" alt="image-20200924164557817"></p>
+<p>一个卡页的内存中通常包含不止一个对象，只要卡页内有一个（或更多）对象的字段存在着跨代指针，那就将对应卡表的数组元素的值标识为1，称为这个元素变脏（Dirty），没有则标识为0。在垃圾收集发生时，只要筛选出卡表中变脏的元素，就能轻易得出哪些卡页内存块中包含跨代指针，把它们加入GC Roots中一并扫描。</p>
+<h3 id="写屏障"><a href="#写屏障" class="headerlink" title="写屏障"></a>写屏障</h3><h3 id="并发的-可达性分析"><a href="#并发的-可达性分析" class="headerlink" title="并发的 可达性分析"></a>并发的 可达性分析</h3><h2 id="7-个垃圾收集器"><a href="#7-个垃圾收集器" class="headerlink" title="7 个垃圾收集器"></a>7 个垃圾收集器</h2><p>垃圾收集器就是内存回收操作的具体实现，HotSpot 里足足有 7 种，为啥要弄这么多，因为它们各有各的适用场景。有的属于新生代收集器，有的属于老年代收集器，所以一般是搭配使用的（除了万能的 G1）。关于它们的简单介绍以及分类请见下图。</p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924163400493.png" alt="image-20200924163400493"></p>
+<h3 id="Serial-ParNew-搭配-Serial-Old-收集器"><a href="#Serial-ParNew-搭配-Serial-Old-收集器" class="headerlink" title="Serial / ParNew 搭配 Serial Old 收集器"></a>Serial / ParNew 搭配 Serial Old 收集器</h3><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924164947674.png" alt="image-20200924164947674"></p>
+<p>Serial 收集器是虚拟机在 Client 模式下的默认新生代收集器，它的优势是简单高效，在单 CPU 模式下很牛。</p>
+<p>ParNew 收集器就是 Serial 收集器的多线程版本，虽然除此之外没什么创新之处，但它却是许多运行在 Server 模式下的虚拟机中的首选新生代收集器，因为除了 Serial 收集器外，只有它能和 CMS 收集器（第一款真正意义上的支持并发的垃圾收集器）搭配使用。</p>
+<h3 id="Parallel-搭配-Parallel-Scavenge-收集器"><a href="#Parallel-搭配-Parallel-Scavenge-收集器" class="headerlink" title="Parallel 搭配 Parallel Scavenge 收集器"></a>Parallel 搭配 Parallel Scavenge 收集器</h3><p>首先，这俩货肯定是要搭配使用的，不仅仅如此，它俩还贼特别，它们的关注点与其他收集器不同，其他收集器关注于尽可能缩短垃圾收集时用户线程的停顿时间，而 Parallel Scavenge 收集器的目的是达到一个可控的吞吐量。</p>
+<blockquote>
+<p>吞吐量 = 运行用户代码时间 / ( 运行用户代码时间 + 垃圾收集时间 )</p>
+</blockquote>
+<p>因此，Parallel Scavenge 收集器不管是新生代还是老年代都是多个线程同时进行垃圾收集，十分适合于应用在注重吞吐量以及 CPU 资源敏感的场合。</p>
+<p>可调节的虚拟机参数：</p>
+<ul>
+<li><code>-XX:MaxGCPauseMillis</code>：最大 GC 停顿的秒数；</li>
+<li><code>-XX:GCTimeRatio</code>：吞吐量大小，一个 0 ~ 100 的数，<code>最大 GC 时间占总时间的比率 = 1 / (GCTimeRatio + 1)</code>；</li>
+<li><code>-XX:+UseAdaptiveSizePolicy</code>：一个开关参数，打开后就无需手工指定 <code>-Xmn</code>，<code>-XX:SurvivorRatio</code> 等参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，自行调整。<strong>垃圾收集的自适应的调节策略（GC Ergonomics）</strong> 区别与ParNew收集器的一个重要特征</li>
+</ul>
+<h3 id="CMS-收集器"><a href="#CMS-收集器" class="headerlink" title="CMS 收集器"></a>CMS 收集器</h3><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924171330386.png" alt="image-20200924171330386"></p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924171348779.png" alt="image-20200924171348779"></p>
+<p><strong>参数设置：</strong></p>
+<ul>
+<li><code>-XX:+UseCMSCompactAtFullCollection</code>：在 CMS 要进行 Full GC 时进行内存碎片整理（默认开启）（<strong>Java9中已经废弃</strong>）</li>
+<li><code>-XX:CMSFullGCsBeforeCompaction</code>：在多少次 Full GC 后进行一次空间整理（默认是 0，即每一次 Full GC 后都进行一次空间整理）（<strong>Java9中已经废弃</strong>）</li>
+</ul>
+<blockquote>
+<p><strong>关于 CMS 使用 标记 - 清除 算法的一点思考：</strong></p>
+<p>之前对于 CMS 为什么要采用 标记 - 清除 算法十分的不理解，既然已经有了看起来更高级的 标记 - 整理 算法，那 CMS 为什么不用呢？最近想了想，感觉可能是这个原因，不过也不是很确定，只是个人的一种猜测。</p>
+<p>标记 - 整理 会将所有存活对象向一端移动，然后直接清理掉边界以外的内存。这就意味着需要一个指针来维护这个分隔存活对象和无用空间的点，而我们知道 CMS 是并发清理的，虽然我们启动了多个线程进行垃圾回收，不过如果使用 标记 - 整理 算法，为了保证线程安全，在整理时要对那个分隔指针加锁，保证同一时刻只有一个线程能修改它，<strong>加锁的这一过程相当于将并行的清理过程变成了串行的，也就失去了并行清理的意义了。</strong></p>
+<p>所以，CMS 采用了 标记 - 清除 算法。</p>
+</blockquote>
+<h3 id="G1-收集器"><a href="#G1-收集器" class="headerlink" title="G1 收集器"></a>G1 收集器</h3><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924173552243.png" alt="image-20200924173552243"></p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924173609615.png" alt="image-20200924173609615"></p>
+<h2 id="低延迟垃圾收集器"><a href="#低延迟垃圾收集器" class="headerlink" title="低延迟垃圾收集器"></a>低延迟垃圾收集器</h2><h2 id="选择合适的垃圾收集器"><a href="#选择合适的垃圾收集器" class="headerlink" title="选择合适的垃圾收集器"></a>选择合适的垃圾收集器</h2><h2 id="GC-日志解读"><a href="#GC-日志解读" class="headerlink" title="GC 日志解读"></a>GC 日志解读</h2><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200924173629358.png" alt="image-20200924173629358"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/23/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-OOM%E5%BC%82%E5%B8%B8/" rel="next" title="《深入理解java虚拟机》学习笔记-OOM异常">
+                <i class="fa fa-chevron-left"></i> 《深入理解java虚拟机》学习笔记-OOM异常
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/24/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5/" rel="prev" title="《深入理解java虚拟机》学习笔记-java内存分配策略">
+                《深入理解java虚拟机》学习笔记-java内存分配策略 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Hardendless" />
+            
+              <p class="site-author-name" itemprop="name">Hardendless</p>
+              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Hardendless" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/Hardendless" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐阅读
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.apple.com/swift/" title="Swift 4" target="_blank">Swift 4</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.apple.com/documentation/objectivec" title="Objective-C" target="_blank">Objective-C</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#判断对象的生死"><span class="nav-text">判断对象的生死</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判断对象是否可用的算法"><span class="nav-text">判断对象是否可用的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引用计数算法"><span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性分析算法（主流）"><span class="nav-text">可达性分析算法（主流）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四种引用类型"><span class="nav-text">四种引用类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#宣告对象死亡的两次标记过程"><span class="nav-text">宣告对象死亡的两次标记过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法区的回收"><span class="nav-text">方法区的回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础：标记-清除算法"><span class="nav-text">基础：标记 - 清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决效率问题：复制算法"><span class="nav-text">解决效率问题：复制算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决空间碎片问题：标记-整理算法"><span class="nav-text">解决空间碎片问题：标记 - 整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进化：分代收集算法"><span class="nav-text">进化：分代收集算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HotSpot-中-GC-算法的实现"><span class="nav-text">HotSpot 中 GC 算法的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#记忆集与卡表"><span class="nav-text">记忆集与卡表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写屏障"><span class="nav-text">写屏障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发的-可达性分析"><span class="nav-text">并发的 可达性分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-个垃圾收集器"><span class="nav-text">7 个垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serial-ParNew-搭配-Serial-Old-收集器"><span class="nav-text">Serial &#x2F; ParNew 搭配 Serial Old 收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallel-搭配-Parallel-Scavenge-收集器"><span class="nav-text">Parallel 搭配 Parallel Scavenge 收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMS-收集器"><span class="nav-text">CMS 收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1-收集器"><span class="nav-text">G1 收集器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#低延迟垃圾收集器"><span class="nav-text">低延迟垃圾收集器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择合适的垃圾收集器"><span class="nav-text">选择合适的垃圾收集器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-日志解读"><span class="nav-text">GC 日志解读</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hardendless</span>
+
+  
+</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共字</span>
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
