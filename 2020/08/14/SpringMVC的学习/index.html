@@ -81,19 +81,23 @@
 
 
 
-<meta name="description" content="SpringMVC的学习 MVC三层设计思想   ​    Spring的web框架围绕DispatcherServlet设计。DispatcherServlet的作用是将请求分发到不同的处理器。从Spring 2.5开始，使用Java 5或者以上版本的用户可以采用基于注解的controller声明方式。 ​    Spring MVC框架像许多其他MVC框架一样, 以请求为驱动 , 围绕一个中心">
+<meta name="description" content="SpringMVC的学习 Controller负责处理请求，View负责处理展示页面，Model连接这两层的数据。 降低了试图与业务逻辑的双向耦合。     MVC三层设计思想   ​    Spring的web框架围绕DispatcherServlet设计。DispatcherServlet的作用是将请求分发到不同的处理器。从Spring 2.5开始，使用Java 5或者以上版本的用户可以采用基">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC的学习">
 <meta property="og:url" content="http://yoursite.com/2020/08/14/SpringMVC%E7%9A%84%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="SpringMVC的学习 MVC三层设计思想   ​    Spring的web框架围绕DispatcherServlet设计。DispatcherServlet的作用是将请求分发到不同的处理器。从Spring 2.5开始，使用Java 5或者以上版本的用户可以采用基于注解的controller声明方式。 ​    Spring MVC框架像许多其他MVC框架一样, 以请求为驱动 , 围绕一个中心">
+<meta property="og:description" content="SpringMVC的学习 Controller负责处理请求，View负责处理展示页面，Model连接这两层的数据。 降低了试图与业务逻辑的双向耦合。     MVC三层设计思想   ​    Spring的web框架围绕DispatcherServlet设计。DispatcherServlet的作用是将请求分发到不同的处理器。从Spring 2.5开始，使用Java 5或者以上版本的用户可以采用基">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214163829385.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214164414629.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214164611041.png">
+<meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214164908576.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200814204603988.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200814204919829.png">
 <meta property="article:published_time" content="2020-08-14T14:45:22.229Z">
-<meta property="article:modified_time" content="2020-08-14T14:45:22.229Z">
+<meta property="article:modified_time" content="2020-12-15T06:40:54.773Z">
 <meta property="article:author" content="Hardendless">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200814204603988.png">
+<meta name="twitter:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214163829385.png">
 
 
 
@@ -418,7 +422,13 @@
       
 
       
-        <h1 id="SpringMVC的学习"><a href="#SpringMVC的学习" class="headerlink" title="SpringMVC的学习"></a>SpringMVC的学习</h1><ul>
+        <h1 id="SpringMVC的学习"><a href="#SpringMVC的学习" class="headerlink" title="SpringMVC的学习"></a>SpringMVC的学习</h1><p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214163829385.png" alt="image-20201214163829385"></p>
+<p>Controller负责处理请求，View负责处理展示页面，Model连接这两层的数据。</p>
+<p>降低了试图与业务逻辑的双向耦合。</p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214164414629.png" alt="image-20201214164414629"></p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214164611041.png" alt="image-20201214164611041"></p>
+<p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201214164908576.png" alt="image-20201214164908576"></p>
+<ul>
 <li>MVC三层设计思想</li>
 </ul>
 <p><img src="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20200814204603988.png" alt="image-20200814204603988"></p>
@@ -543,7 +553,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -666,7 +676,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
