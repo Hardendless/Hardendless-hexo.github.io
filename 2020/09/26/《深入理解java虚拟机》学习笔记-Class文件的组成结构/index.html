@@ -94,6 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/09/26/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Class%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="Hardendless">
 <meta property="og:description" content="Class 文件的组成结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、">
+<meta property="og:locale">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20210106171445083.png">
 <meta property="og:image" content="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97.png">
 <meta property="og:image" content="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/%E6%9F%A5%E7%9C%8B%E7%B1%BB%E7%9A%84%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97.png">
@@ -112,7 +113,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '',
     scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
@@ -151,7 +152,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -335,7 +336,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/26/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Class%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -346,7 +347,6 @@
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">《深入理解java虚拟机》学习笔记-Class文件的组成结构</h1>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  2.4k
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  8
                 </span>
               
             </div>
@@ -695,10 +695,10 @@
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
-                alt="Hardendless" />
+                alt="" />
             
-              <p class="site-author-name" itemprop="name">Hardendless</p>
-              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -708,7 +708,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -719,7 +719,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -730,7 +730,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -804,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Class-文件的组成结构"><span class="nav-text">Class 文件的组成结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-文件的头-8-个字节"><span class="nav-text">Class 文件的头 8 个字节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-text">常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-访问标志"><span class="nav-text">2.4 访问标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-当前类索引-父类索引与接口索引集合"><span class="nav-text">2.5 当前类索引,父类索引与接口索引集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-字段表集合"><span class="nav-text">2.6 字段表集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-方法表集合"><span class="nav-text">2.7 方法表集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-属性表集合"><span class="nav-text">2.8 属性表集合</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Class-%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84"><span class="nav-text">Class 文件的组成结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%B4-8-%E4%B8%AA%E5%AD%97%E8%8A%82"><span class="nav-text">Class 文件的头 8 个字节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-text">常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97"><span class="nav-text">2.4 访问标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E5%BD%93%E5%89%8D%E7%B1%BB%E7%B4%A2%E5%BC%95-%E7%88%B6%E7%B1%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E6%8E%A5%E5%8F%A3%E7%B4%A2%E5%BC%95%E9%9B%86%E5%90%88"><span class="nav-text">2.5 当前类索引,父类索引与接口索引集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-%E5%AD%97%E6%AE%B5%E8%A1%A8%E9%9B%86%E5%90%88"><span class="nav-text">2.6 字段表集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-%E6%96%B9%E6%B3%95%E8%A1%A8%E9%9B%86%E5%90%88"><span class="nav-text">2.7 方法表集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88"><span class="nav-text">2.8 属性表集合</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -845,16 +845,16 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count"></span>
+    <span title="Site words total count">39k</span>
   
 </div>
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共字</span>
+  <span class="post-count">博客全站共39k字</span>
 </div>
 
-
+<!--
   <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
@@ -866,7 +866,7 @@
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
-
+-->
 
         
 

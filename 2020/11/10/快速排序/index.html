@@ -94,6 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/11/10/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/index.html">
 <meta property="og:site_name" content="Hardendless">
 <meta property="og:description" content="快速排序时间复杂度复杂度的期望值：O(nlogn)  普通算法：看最差 随机算法：看期望   核心：把数字放到正确的位置  递归的含义：  快速排序中的问题：  对有序数组使用快速排序，算法的时间复杂度会退化为O（n2），因为会一直循环调用sort函数，只有右边。  解决办法：通过随机生成一个位置，与最左边位置的数进行交换。   对于一组完全一样的数据，快速排序也会退化为O(n2)  解决办法：使">
+<meta property="og:locale">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201109213520352.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201109213619057.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201110105317121.png">
@@ -112,7 +113,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '',
     scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
@@ -151,7 +152,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -335,7 +336,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/10/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -346,7 +347,6 @@
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">快速排序</h1>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  1.4k
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  6
                 </span>
               
             </div>
@@ -613,10 +613,10 @@
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
-                alt="Hardendless" />
+                alt="" />
             
-              <p class="site-author-name" itemprop="name">Hardendless</p>
-              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -626,7 +626,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -637,7 +637,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -648,7 +648,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -722,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#快速排序"><span class="nav-text">快速排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度"><span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典引用：LeetCode75"><span class="nav-text">经典引用：LeetCode75</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#循环不变量定义-1"><span class="nav-text">循环不变量定义 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#循环不变量：声明的变量在遍历的过程中需要保持定义不变。"><span class="nav-text">循环不变量：声明的变量在遍历的过程中需要保持定义不变。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设计循环不变量的原则"><span class="nav-text">设计循环不变量的原则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用-Select-K"><span class="nav-text">应用-Select K</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="nav-text">快速排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E5%BC%95%E7%94%A8%EF%BC%9ALeetCode75"><span class="nav-text">经典引用：LeetCode75</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89-1"><span class="nav-text">循环不变量定义 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E9%87%8F%EF%BC%9A%E5%A3%B0%E6%98%8E%E7%9A%84%E5%8F%98%E9%87%8F%E5%9C%A8%E9%81%8D%E5%8E%86%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%9C%80%E8%A6%81%E4%BF%9D%E6%8C%81%E5%AE%9A%E4%B9%89%E4%B8%8D%E5%8F%98%E3%80%82"><span class="nav-text">循环不变量：声明的变量在遍历的过程中需要保持定义不变。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E9%87%8F%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-text">设计循环不变量的原则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8-Select-K"><span class="nav-text">应用-Select K</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -763,16 +763,16 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count"></span>
+    <span title="Site words total count">39k</span>
   
 </div>
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共字</span>
+  <span class="post-count">博客全站共39k字</span>
 </div>
 
-
+<!--
   <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
@@ -784,7 +784,7 @@
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
-
+-->
 
         
 

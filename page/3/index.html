@@ -94,6 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="Hardendless">
 <meta property="og:description" content="错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。">
+<meta property="og:locale">
 <meta property="article:author" content="Hardendless">
 <meta name="twitter:card" content="summary">
 
@@ -102,7 +103,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '',
     scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
@@ -141,7 +142,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -323,10 +324,10 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E6%8E%A5%E5%8F%A3%E3%80%81lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/11/SpringBoot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -337,7 +338,167 @@
 
     
       <header class="post-header">
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/09/11/SpringBoot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" itemprop="url">SpringBoot自动装配</a></h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-11T22:29:29+08:00">
+                2020-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          SpringBoot自动装配自动扫描一个类，需要加这四个注解。
+Controller处理请求的组件
+Service开发业务组件
+Repository使用数据库的组件
+Component在任何地方都能使用的组件
+1.自动配置原理1）、SpringBoot启动的时候加载主配置类，开启了自动配置功能 ==
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/09/11/SpringBoot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E6%8E%A5%E5%8F%A3%E3%80%81lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hardendless">
+    </span>
+
+    
+      <header class="post-header">
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -386,7 +547,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  13
                 </span>
               
 
@@ -402,7 +563,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -483,7 +644,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/14/SpringMVC%E7%9A%84%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -494,7 +655,6 @@
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -543,7 +703,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  163
                 </span>
               
 
@@ -559,7 +719,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -650,7 +810,7 @@ MVC三层设计思想
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/13/Spring%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B%E7%9A%84Bug%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -661,7 +821,6 @@ MVC三层设计思想
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -710,7 +869,7 @@ MVC三层设计思想
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  1.1k
                 </span>
               
 
@@ -726,7 +885,7 @@ MVC三层设计思想
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  6
                 </span>
               
             </div>
@@ -807,7 +966,7 @@ MVC三层设计思想
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/27/%E5%8F%8C%E6%8C%87%E9%92%88%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -818,7 +977,6 @@ MVC三层设计思想
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -889,7 +1047,7 @@ MVC三层设计思想
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  11
                 </span>
               
 
@@ -905,7 +1063,7 @@ MVC三层设计思想
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -989,7 +1147,7 @@ MVC三层设计思想
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/22/%E4%B8%BA%E4%BB%80%E4%B9%88useSSL=true%20%E5%86%99true%20%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%8C%E6%94%B9%E6%88%90false%20%E5%B0%B1%E5%8F%AF%E4%BB%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -1000,7 +1158,6 @@ MVC三层设计思想
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -1071,7 +1228,7 @@ MVC三层设计思想
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  291
                 </span>
               
 
@@ -1087,7 +1244,7 @@ MVC三层设计思想
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -1169,7 +1326,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/19/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -1180,7 +1337,6 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -1229,7 +1385,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  73
                 </span>
               
 
@@ -1245,7 +1401,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -1326,7 +1482,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/19/Javascript%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -1337,7 +1493,6 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -1408,7 +1563,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  110
                 </span>
               
 
@@ -1424,7 +1579,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -1514,7 +1669,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/19/%E5%89%91%E6%8C%87offer-t25%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E5%88%97%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -1525,7 +1680,6 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -1596,7 +1750,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  358
                 </span>
               
 
@@ -1612,7 +1766,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -1697,7 +1851,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/19/%E5%89%91%E6%8C%87offer%2009.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -1708,7 +1862,6 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">
@@ -1779,7 +1932,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  418
                 </span>
               
 
@@ -1795,7 +1948,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  1
                 </span>
               
             </div>
@@ -1825,186 +1978,6 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/07/19/%E5%89%91%E6%8C%87offer%2009.%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/09/%E5%89%91%E6%8C%87offer12/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hardendless">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/09/%E5%89%91%E6%8C%87offer12/" itemprop="url">剑指offer12</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-09T00:00:00+08:00">
-                2020-07-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">Leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          剑指offer12
-请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/09/%E5%89%91%E6%8C%87offer12/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2083,10 +2056,10 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
-                alt="Hardendless" />
+                alt="" />
             
-              <p class="site-author-name" itemprop="name">Hardendless</p>
-              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -2096,7 +2069,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2107,7 +2080,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2118,7 +2091,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2217,16 +2190,16 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count"></span>
+    <span title="Site words total count">39k</span>
   
 </div>
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共字</span>
+  <span class="post-count">博客全站共39k字</span>
 </div>
 
-
+<!--
   <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
@@ -2238,7 +2211,7 @@ MySQL在高版本需要指明是否进行SSL连接SSL协议提供服务主要：
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
-
+-->
 
         
 

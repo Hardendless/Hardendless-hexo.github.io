@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-12-09T13:41:31.569Z</updated>
+  <updated>2021-03-01T12:35:52.576Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Spring</title>
+    <link href="http://yoursite.com/2021/03/01/Spring/"/>
+    <id>http://yoursite.com/2021/03/01/Spring/</id>
+    <published>2021-02-28T16:00:00.000Z</published>
+    <updated>2021-03-01T12:35:52.576Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Spring&quot;&gt;&lt;a href=&quot;#Spring&quot; class=&quot;headerlink&quot; title=&quot;Spring&quot;&gt;&lt;/a&gt;Spring&lt;/h1&gt;&lt;p&gt;Spring 模块构建在核心容器之上，核心容器定义了创建、配置和管理 bean 的方式 。&lt;/p&gt;
+&lt;h2
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Spring" scheme="http://yoursite.com/categories/Spring/"/>
+    
+    
+      <category term="Spring" scheme="http://yoursite.com/tags/Spring/"/>
+    
+      <category term="IoC" scheme="http://yoursite.com/tags/IoC/"/>
+    
+      <category term="AOP" scheme="http://yoursite.com/tags/AOP/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux</title>
@@ -443,29 +475,6 @@
         
         
           &lt;h1 id=&quot;《深入理解java虚拟机》学习笔记-java内存结构&quot;&gt;&lt;a href=&quot;#《深入理解java虚拟机》学习笔记-java内存结构&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>SpringBoot自动装配</title>
-    <link href="http://yoursite.com/2020/09/11/SpringBoot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/"/>
-    <id>http://yoursite.com/2020/09/11/SpringBoot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/</id>
-    <published>2020-09-11T14:29:29.702Z</published>
-    <updated>2020-12-15T06:40:57.764Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h1 id=&quot;SpringBoot自动装配&quot;&gt;&lt;a href=&quot;#SpringBoot自动装配&quot; class=&quot;headerlink&quot;
         
       
     

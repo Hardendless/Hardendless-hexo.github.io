@@ -94,6 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/11/17/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/index.html">
 <meta property="og:site_name" content="Hardendless">
 <meta property="og:description" content="二分搜索树二叉树结构 二叉树的重要性比如经典的排序算法，快速排序可以看作是二叉树的前序遍历，归并排序可以看作是二叉树的后续遍历。 快速排序的逻辑是，若要对nums[lo..hi]进行排序，我们先找一个分界点p，通过交换元素使得nums[lo..p-1]都小于等于nums[p]，且nums[p+1..hi]都大于nums[p]，然后递归地去nums[lo..p-1]和nums[p+1..hi]中寻找">
+<meta property="og:locale">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201113154610512.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201113154838691.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201116172618540.png">
@@ -109,7 +110,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '',
     scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
@@ -148,7 +149,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -332,7 +333,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/17/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -343,7 +344,6 @@
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">二分搜索树</h1>
@@ -390,7 +390,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  2.5k
                 </span>
               
 
@@ -406,7 +406,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  11
                 </span>
               
             </div>
@@ -600,10 +600,10 @@
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
-                alt="Hardendless" />
+                alt="" />
             
-              <p class="site-author-name" itemprop="name">Hardendless</p>
-              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -613,7 +613,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -624,7 +624,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -635,7 +635,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -709,7 +709,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#二分搜索树"><span class="nav-text">二分搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树结构"><span class="nav-text">二叉树结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树的重要性"><span class="nav-text">二叉树的重要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归算法的秘诀"><span class="nav-text">递归算法的秘诀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分搜索树-1"><span class="nav-text">二分搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的添加和查询"><span class="nav-text">二分搜索树的添加和查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的前序遍历"><span class="nav-text">二分搜索树的前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的非递归前序遍历"><span class="nav-text">二分搜索树的非递归前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的中序遍历"><span class="nav-text">二分搜索树的中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的后续遍历"><span class="nav-text">二分搜索树的后续遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的删除"><span class="nav-text">二分搜索树的删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#删除二分搜索树的最大值和最小值"><span class="nav-text">删除二分搜索树的最大值和最小值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除二分搜索树的任意节点"><span class="nav-text">删除二分搜索树的任意节点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二分搜索树的层序遍历"><span class="nav-text">二分搜索树的层序遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断BST的合法性"><span class="nav-text">判断BST的合法性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在BST搜索一个树的模板"><span class="nav-text">在BST搜索一个树的模板</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-text">二分搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BB%93%E6%9E%84"><span class="nav-text">二叉树结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-text">二叉树的重要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95%E7%9A%84%E7%A7%98%E8%AF%80"><span class="nav-text">递归算法的秘诀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91-1"><span class="nav-text">二分搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%B7%BB%E5%8A%A0%E5%92%8C%E6%9F%A5%E8%AF%A2"><span class="nav-text">二分搜索树的添加和查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">二分搜索树的前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">二分搜索树的非递归前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">二分搜索树的中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E7%BB%AD%E9%81%8D%E5%8E%86"><span class="nav-text">二分搜索树的后续遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%88%A0%E9%99%A4"><span class="nav-text">二分搜索树的删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC"><span class="nav-text">删除二分搜索树的最大值和最小值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E4%BB%BB%E6%84%8F%E8%8A%82%E7%82%B9"><span class="nav-text">删除二分搜索树的任意节点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">二分搜索树的层序遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%ADBST%E7%9A%84%E5%90%88%E6%B3%95%E6%80%A7"><span class="nav-text">判断BST的合法性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8BST%E6%90%9C%E7%B4%A2%E4%B8%80%E4%B8%AA%E6%A0%91%E7%9A%84%E6%A8%A1%E6%9D%BF"><span class="nav-text">在BST搜索一个树的模板</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -750,16 +750,16 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count"></span>
+    <span title="Site words total count">39k</span>
   
 </div>
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共字</span>
+  <span class="post-count">博客全站共39k字</span>
 </div>
 
-
+<!--
   <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
@@ -771,7 +771,7 @@
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
-
+-->
 
         
 

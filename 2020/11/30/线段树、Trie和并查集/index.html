@@ -94,6 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/11/30/%E7%BA%BF%E6%AE%B5%E6%A0%91%E3%80%81Trie%E5%92%8C%E5%B9%B6%E6%9F%A5%E9%9B%86/index.html">
 <meta property="og:site_name" content="Hardendless">
 <meta property="og:description" content="线段树、Trie和并查集线段树（区间树）   线段树不是完全二叉树 线段树是平衡二叉树（树的深度差距不超过1）    实现： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273">
+<meta property="og:locale">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201129161730698.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201129170553129.png">
 <meta property="og:image" content="https://gitee.com/Hardendless/blogImg/raw/master/img/image-20201129170842568.png">
@@ -115,7 +116,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '',
     scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
@@ -154,7 +155,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -338,7 +339,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/30/%E7%BA%BF%E6%AE%B5%E6%A0%91%E3%80%81Trie%E5%92%8C%E5%B9%B6%E6%9F%A5%E9%9B%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hardendless">
+      <meta itemprop="name" content="">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
@@ -349,7 +350,6 @@
 
     
       <header class="post-header">
-
         
         
           <h1 class="post-title" itemprop="name headline">线段树、Trie和并查集</h1>
@@ -396,7 +396,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  
+                  2.2k
                 </span>
               
 
@@ -412,7 +412,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  
+                  11
                 </span>
               
             </div>
@@ -590,10 +590,10 @@
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
-                alt="Hardendless" />
+                alt="" />
             
-              <p class="site-author-name" itemprop="name">Hardendless</p>
-              <p class="site-description motion-element" itemprop="description">错的是被开心冲昏了头脑，虎头蛇尾，乐极生悲，错的是被难过彻底打垮，自我否定，自暴自弃。</p>
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -603,7 +603,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -614,7 +614,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -625,7 +625,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -699,7 +699,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线段树、Trie和并查集"><span class="nav-text">线段树、Trie和并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线段树（区间树）"><span class="nav-text">线段树（区间树）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trie-字典树-前缀树"><span class="nav-text">Trie 字典树 前缀树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Trie"><span class="nav-text">什么是Trie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并查集"><span class="nav-text">并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现并查集"><span class="nav-text">实现并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现并查集（Quick-Union）"><span class="nav-text">实现并查集（Quick Union）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#size优化"><span class="nav-text">size优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于rank优化"><span class="nav-text">基于rank优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径压缩"><span class="nav-text">路径压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#递归实现"><span class="nav-text">递归实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度"><span class="nav-text">时间复杂度</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%AE%B5%E6%A0%91%E3%80%81Trie%E5%92%8C%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-text">线段树、Trie和并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%AE%B5%E6%A0%91%EF%BC%88%E5%8C%BA%E9%97%B4%E6%A0%91%EF%BC%89"><span class="nav-text">线段树（区间树）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trie-%E5%AD%97%E5%85%B8%E6%A0%91-%E5%89%8D%E7%BC%80%E6%A0%91"><span class="nav-text">Trie 字典树 前缀树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFTrie"><span class="nav-text">什么是Trie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-text">并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-text">实现并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%B9%B6%E6%9F%A5%E9%9B%86%EF%BC%88Quick-Union%EF%BC%89"><span class="nav-text">实现并查集（Quick Union）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#size%E4%BC%98%E5%8C%96"><span class="nav-text">size优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Erank%E4%BC%98%E5%8C%96"><span class="nav-text">基于rank优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A9"><span class="nav-text">路径压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0"><span class="nav-text">递归实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">时间复杂度</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -740,16 +740,16 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count"></span>
+    <span title="Site words total count">39k</span>
   
 </div>
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共字</span>
+  <span class="post-count">博客全站共39k字</span>
 </div>
 
-
+<!--
   <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
@@ -761,7 +761,7 @@
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
-
+-->
 
         
 
